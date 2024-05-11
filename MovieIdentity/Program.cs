@@ -1,4 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using MovieIdentity.Areas.Identity.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("MovieAuthConnection") ??
+                       throw new InvalidOperationException("Connection string 'MovieAuthConnection' not found.");
+
+builder.Services.AddDbContext<MovieAuth>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<MovieAuth>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
