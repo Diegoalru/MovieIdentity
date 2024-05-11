@@ -4,13 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MovieIdentity.Areas.Identity.Data;
 
-public class MovieAuth : IdentityDbContext<IdentityUser>
+public class MovieAuth(DbContextOptions<MovieAuth> options) : IdentityDbContext<MovieUser>(options)
 {
-    public MovieAuth(DbContextOptions<MovieAuth> options)
-        : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

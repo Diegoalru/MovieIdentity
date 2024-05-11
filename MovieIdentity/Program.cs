@@ -5,7 +5,7 @@ using MovieIdentity.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("MovieAuthConnection") ??
-                       throw new InvalidOperationException("Connection string 'MovieAuthConnection' not found.");
+                       throw new InvalidOperationException("Connection string not found.");
 
 builder.Services.AddDbContext<MovieAuth>(options => options.UseSqlServer(connectionString));
 
