@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MovieIdentity.Areas.Identity.Data;
 
@@ -9,7 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("MovieAuthConne
 
 builder.Services.AddDbContext<MovieAuth>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<MovieUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<MovieAuth>();
 
 // Add services to the container.
