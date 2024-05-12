@@ -6,20 +6,23 @@
 
 <h1>Movie List 📽️</h1>
 
-<form method="post" class="card p-3">
-    <div class="row">
-        <div asp-validation-summary="All"></div>
-    </div>
-    <div class="form-group mb-0 align-middle">
-        <label asp-for="NewMovie.Name">Name</label>
-        <input type="text" asp-for="NewMovie.Name" class="mr-5">
-        <label asp-for="NewMovie.Genre">Genre</label>
-        <select asp-for="NewMovie.Genre" asp-items="Model.Genres" class="mr-5"></select>
-        <label asp-for="NewMovie.Year">Year</label>
-        <input type="text" asp-for="NewMovie.Year" class="mr-5" value="2024">
-        <button class="btn btn-primary">Add</button>
-    </div>
-</form>
+@if (Model.IsAdmin)
+{
+    <form method="post" class="card p-3">
+        <div class="row">
+            <div asp-validation-summary="All"></div>
+        </div>
+        <div class="form-group mb-0 align-middle">
+            <label asp-for="NewMovie.Name">Name</label>
+            <input type="text" asp-for="NewMovie.Name" class="mr-5">
+            <label asp-for="NewMovie.Genre">Genre</label>
+            <select asp-for="NewMovie.Genre" asp-items="Model.Genres" class="mr-5"></select>
+            <label asp-for="NewMovie.Year">Year</label>
+            <input type="text" asp-for="NewMovie.Year" class="mr-5" value="2024">
+            <button class="btn btn-primary">Add</button>
+        </div>
+    </form>
+}
 
 @if (Model.Movies.Count == 0)
 {
@@ -35,7 +38,10 @@ else
             <th scope="col">Name</th>
             <th scope="col">Genre</th>
             <th scope="col">Year</th>
-            <th scope="col">Actions</th>
+            @if (Model.IsAdmin)
+            {
+                <th scope="col">Actions</th>
+            }
         </tr>
         </thead>
         <tbody>
@@ -45,11 +51,14 @@ else
                 <td>@movie.Name</td>
                 <td>@movie.Genre</td>
                 <td>@movie.Year</td>
-                <td>
-                    <form method="post" asp-page-handler="Delete" asp-route-id="@movie.Id">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
+                @if (Model.IsAdmin)
+                {
+                    <td>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@movie.Id">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                }
             </tr>
         }
         </tbody>
