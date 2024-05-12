@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using MovieIdentity.Areas.Identity.Data;
 using MovieIdentity.Services;
+using QRCoder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddDefaultIdentity<MovieUser>(options => options.SignIn.Require
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddSingleton(new QrCodeService(new QRCodeGenerator()));
 
 var app = builder.Build();
 
