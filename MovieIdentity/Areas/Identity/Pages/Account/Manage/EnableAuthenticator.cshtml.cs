@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MovieIdentity.Areas.Identity.Data;
+using MovieIdentity.Services;
 
 namespace MovieIdentity.Areas.Identity.Pages.Account.Manage
 {
@@ -23,6 +24,7 @@ namespace MovieIdentity.Areas.Identity.Pages.Account.Manage
         private readonly ILogger<EnableAuthenticatorModel> _logger;
         private readonly UrlEncoder _urlEncoder;
 
+        public string QrCodeAsBase64 { get; set; } = string.Empty;
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
         public EnableAuthenticatorModel(
@@ -85,7 +87,7 @@ namespace MovieIdentity.Areas.Identity.Pages.Account.Manage
             public string Code { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync([FromServices] QrCodeService qrCodeService)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -94,7 +96,8 @@ namespace MovieIdentity.Areas.Identity.Pages.Account.Manage
             }
 
             await LoadSharedKeyAndQrCodeUriAsync(user);
-
+            QrCodeAsBase64 = qrCodeService.GetQrCodeAsBase64(AuthenticatorUri);
+            
             return Page();
         }
 
@@ -181,7 +184,7 @@ namespace MovieIdentity.Areas.Identity.Pages.Account.Manage
             return string.Format(
                 CultureInfo.InvariantCulture,
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("Microsoft.AspNetCore.Identity.UI"),
+                _urlEncoder.Encode("Movies"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }
